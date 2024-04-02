@@ -1,16 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Fetch products from API
-  fetch("https://api.fake-rest.refine.dev/products")
+  fetchProductList();
+});
+
+function fetchProductList() {
+  fetch("https://reqres.in/api/users?page=2")
     .then((response) => response.json())
     .then((data) => {
-      var products = data.slice(0, 50);
-      var productList = document.getElementById("productList");
-      products.forEach((product) => {
-        var productDiv = document.createElement("li");
-        productDiv.textContent =
-          product.name + " -> " + product.price + " -> " + product.material;
-        productList.appendChild(productDiv);
+      const productList = document.getElementById("productList");
+      data.data.forEach((user) => {
+        const productCard = document.createElement("div");
+        productCard.classList.add("product");
+        productCard.innerHTML = `
+          <img src="${user.avatar}" alt="Product Image">
+          <h3>${user.first_name} ${user.last_name}</h3>
+          <p>Email: ${user.email}</p>
+        `;
+        productList.appendChild(productCard);
       });
     })
-    .catch((error) => console.error("Error fetching products:", error));
-});
+    .catch((error) => console.error("Error fetching product list:", error));
+}
